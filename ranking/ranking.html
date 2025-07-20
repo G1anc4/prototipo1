@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranking Académico - Poliweb</title>
+    <link rel="stylesheet" href="css/ranking.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Poliweb Ranking</div>
+        <div class="header-controls">
+            <div class="filter-control">
+                <select id="filter-by" class="filter-select">
+                    <option value="all">Todos los estudiantes</option>
+                    <option value="top10">Top 10</option>
+                    <option value="top20">Top 20</option>
+                </select>
+            </div>
+            <a href="../index.html" class="back-btn">Volver</a>
+        </div>
+    </header>
+    
+    <div class="container">
+        <h1 class="ranking-title">Ranking Académico 2025</h1>
+        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-value" id="total-students">0</div>
+                <div class="stat-label">Estudiantes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="top-average">0.0</div>
+                <div class="stat-label">Mejor promedio</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avg-average">0.0</div>
+                <div class="stat-label">Promedio general</div>
+            </div>
+        </div>
+        
+        <div class="ranking-grid">
+            <div class="ranking-header">
+                <div style="width: 80px;">Posición</div>
+                <div style="flex: 1;">Estudiante</div>
+                <div style="width: 120px;">Promedio</div>
+                <div style="width: 100px;">Progreso</div>
+            </div>
+            
+            <div id="ranking-list">
+                <!-- Ranking se cargará aquí -->
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <button id="download-csv" class="download-btn">
+                <i class="fas fa-file-csv"></i> Exportar CSV
+            </button>
+            <button id="download-pdf" class="download-btn">
+                <i class="fas fa-file-pdf"></i> Exportar PDF
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/ranking.js"></script>
+</body>
+</html>

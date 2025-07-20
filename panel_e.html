@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Estudiante - Poliweb</title>
+    <style>
+        :root {
+            --primary-color: #6f0000;
+            --secondary-color: #990000;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --success-color: #2e7d32;
+            --danger-color: #c62828;
+            --warning-color: #f9a825;
+            --info-color: #1565c0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            background-image: linear-gradient(to bottom, #f5f5f5, #e9e9e9);
+            color: var(--dark-color);
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo::before {
+            content: "🎓";
+            font-size: 1.8rem;
+        }
+        
+        .logout-btn {
+            background: white;
+            color: var(--secondary-color);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logout-btn:hover {
+            background: #ffe5e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .logout-btn::after {
+            content: "→";
+            font-weight: bold;
+        }
+        
+        .main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        .card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        
+        .profile-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .profile-info p {
+            margin: 0.3rem 0 0;
+            color: #666;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: #e0e0e0;
+            color: #555;
+            margin-top: 0.5rem;
+        }
+        
+        .main-area-badge {
+            background: var(--secondary-color);
+            color: white;
+        }
+        
+        .areas-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .area-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border-top: 3px solid var(--secondary-color);
+        }
+        
+        .area-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .area-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .area-title {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .area-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+        }
+        
+        .nota-display {
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            background: #f8f8f8;
+            border: 2px dashed #e0e0e0;
+        }
+        
+        .nota-mensaje {
+            padding: 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+        
+        .aprobado {
+            background-color: #e8f5e9;
+            color: var(--success-color);
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .desaprobado {
+            background-color: #ffebee;
+            color: var(--danger-color);
+            border-left: 4px solid var(--danger-color);
+        }
+        
+        .sin-nota {
+            background-color: #e3f2fd;
+            color: var(--info-color);
+            border-left: 4px solid var(--info-color);
+        }
+        
+        .file-section {
+            margin-top: 2rem;
+        }
+        
+        select, input[type="file"] {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.8rem 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        
+        select:focus, input[type="file"]:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(153, 0, 0, 0.1);
+        }
+        
+        .submit-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 3px 10px rgba(153, 0, 0, 0.2);
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(153, 0, 0, 0.3);
+        }
+        
+        .file-info {
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            display: none;
+        }
+        
+        .file-info p {
+            margin: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .last-file {
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .area-card {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        /* Efecto de carga */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .areas-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* === SISTEMA DE LOGROS === */
+        .logros-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logros-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .logro-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+
+        .logro-icon {
+            font-size: 2rem;
+            min-width: 50px;
+        }
+
+        .logro-bloqueado {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+
+        #verLogrosBtn {
+            position: fixed;
+            bottom: 109px;
+            right: 35px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 999;
+            transition: transform 0.3s;
+        }
+
+        #verLogrosBtn:hover {
+            transform: scale(1.1);
+        }
+
+        .notificacion-logro {
+            position: fixed;
+            bottom: 160px;
+            right: 30px;
+            background: linear-gradient(135deg, #ffc107, #ff9800);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+/* === CHATBOT === */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column-reverse; /* Botón abajo, ventana arriba */
+            align-items: flex-end; /* Alineación a la derecha */
+            gap: 15px; /* Espacio entre ventana y botón */
+        }
+        
+        .chatbot-toggle {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-window {
+            width: 350px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+            overflow: hidden;
+            transform: translateY(100%);
+            opacity: 0;
+            height: 0;
+            transition: all 0.3s;
+        }
+        
+        .chatbot-window.active {
+            transform: translateY(0);
+            opacity: 1;
+            height: 500px;
+            margin-bottom: 15px;
+        }
+        
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chatbot-header h3 {
+            margin: 0;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .chatbot-messages {
+            height: 350px;
+            padding: 1rem;
+            overflow-y: auto;
+            background: #f9f9f9;
+        }
+        
+        .message {
+            margin-bottom: 1rem;
+            max-width: 80%;
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            line-height: 1.4;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .user-message {
+            background: var(--secondary-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .bot-message {
+            background: white;
+            border: 1px solid #eee;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+        
+        .chatbot-input {
+            display: flex;
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        
+        .chatbot-input input:focus {
+            border-color: var(--secondary-color);
+        }
+        
+        .chatbot-input button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .chatbot-input button:hover {
+            background: var(--primary-color);
+        }
+        
+        .typing-indicator {
+            display: inline-block;
+            padding: 10px;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            margin: 0 2px;
+            opacity: 0.4;
+            animation: typing 1s infinite;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 100% { opacity: 0.4; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-3px); }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Verificar sesión y actualizar datos
+        const sesion = JSON.parse(localStorage.getItem('sesionActiva'));
+        if (!sesion || sesion.rol !== 'estudiante') {
+            window.location.href = 'login.html';
+        }
+        
+        // Actualizar datos desde localStorage
+        const usuarios = JSON.parse(localStorage.getItem('usuariosRegistrados') || []);
+        const usuarioActual = usuarios.find(u => u.dni === sesion.dni);
+        if (usuarioActual) {
+            // Fusionar datos actualizados con la sesión
+            const sesionActualizada = { ...sesion, ...usuarioActual };
+            localStorage.setItem('sesionActiva', JSON.stringify(sesionActualizada));
+            
+            // Solo recargar si hay cambios en las notas
+            if (JSON.stringify(sesion.notas) !== JSON.stringify(usuarioActual.notas)) {
+                window.location.reload();
+            }
+        }
+    </script>
+
+    <header>
+        <div class="logo">Poliweb - Panel del Estudiante</div>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    </header>
+
+    <main class="main">
+        <div class="card">
+            <div class="profile-section">
+                <div class="profile-icon">
+                    👨‍🎓
+                </div>
+                <div class="profile-info">
+                    <h3 id="nombreEstudiante"></h3>
+                    <p>DNI: <span id="dniEstudiante"></span></p>
+                    <span class="badge main-area-badge" id="areaEstudianteBadge"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Mis calificaciones por área</h3>
+            <div class="areas-container" id="areasContainer"></div>
+        </div>
+        
+        <div class="card">
+            <h3>📤 Entregar trabajo</h3>
+            <div class="file-section">
+                <select id="areaTrabajo" class="file-input">
+                    <option value="">-- Selecciona un área --</option>
+                    <option value="Ciencia y tecnología">🔬 Ciencia y tecnología</option>
+                    <option value="Matemática">🧮 Matemática</option>
+                    <option value="Comunicación">📝 Comunicación</option>
+                    <option value="DPCC">🏛️ DPCC</option>
+                    <option value="Inglés">🌎 Inglés</option>
+                    <option value="Ciencias sociales">🏙️ Ciencias sociales</option>
+                    <option value="Arte">🎨 Arte</option>
+                    <option value="Religión">🙏 Religión</option>
+                    <option value="EPT">🛠️ EPT</option>
+                    <option value="Educación física">⚽ Educación física</option>
+                </select>
+                
+                <label for="archivoTrabajo" style="display: block; margin: 1rem 0 0.5rem; font-weight: bold;">
+                    📎 Seleccionar archivo:
+                </label>
+                <input type="file" id="archivoTrabajo" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
+                
+                <button class="submit-btn" onclick="enviarArchivo()" id="submitBtn">
+                    <span id="btnText">Enviar archivo</span>
+                    <span id="btnLoading" class="loading" style="display: none;"></span>
+                </button>
+                
+                <div class="file-info" id="ultimoArchivoInfo">
+                    <p class="last-file">Último archivo enviado:</p>
+                    <p id="nombreArchivo">📄 Sin archivos enviados</p>
+                    <p id="areaArchivo">📚 Ningún área seleccionada</p>
+                    <p id="fechaArchivo">📅 Sin fecha de envío</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- === BOTÓN Y MODAL DE LOGROS === -->
+    <button id="verLogrosBtn" title="Tus logros">🏆</button>
+    <div class="notificacion-logro" id="notificacionLogro">
+        <strong>¡Logro desbloqueado!</strong>
+        <div id="logroDesbloqueadoTitulo"></div>
+    </div>
+    <div class="logros-container" id="logrosContainer">
+        <div class="logros-content">
+            <h2>🏆 Tus Logros</h2>
+            <div id="listaLogros"></div>
+            <button onclick="cerrarLogros()" class="submit-btn">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- === CHATBOT === -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-icon">🤖</div>
+                <h3>Bianca</h3>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    ¡Hola <span id="studentNameChat"></span>! Soy tu asistente educativo. ¿En qué puedo ayudarte hoy?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="userMessage" placeholder="Escribe tu pregunta..." autocomplete="off">
+                <button id="sendMessage">➤</button>
+            </div>
+        </div>
+        <div class="chatbot-toggle" id="chatbotToggle">
+            💬
+        </div>
+    </div>
+
+    <script>
+        // ===== SISTEMA DE LOGROS ===== //
+        const logrosData = {
+            "primer_login": {
+                titulo: "Bienvenido a Poliweb",
+                descripcion: "Iniciaste sesión por primera vez",
+                icono: "👋",
+                desbloqueado: false
+            },
+            "archivo_subido": {
+                titulo: "Tarea entregada",
+                descripcion: "Enviaste tu primer archivo",
+                icono: "📤",
+                desbloqueado: false
+            },
+            "nota_perfecta": {
+                titulo: "¡Nota perfecta!",
+                descripcion: "Obtuviste 20 en un área",
+                icono: "💯",
+                desbloqueado: false
+            },
+            "consistencia": {
+                titulo: "Estudiante consistente",
+                descripcion: "Entregaste 5 tareas seguidas",
+                icono: "📅",
+                desbloqueado: false
+            },
+            "chatbot_experto": {
+                titulo: "Experto en chatbots",
+                descripcion: "Hiciste 10 preguntas al asistente",
+                icono: "🤖",
+                desbloqueado: false
+            },
+            "multitarea": {
+                titulo: "Estudiante multitarea",
+                descripcion: "Tienes 3 logros desbloqueados",
+                icono: "🌟",
+                desbloqueado: false
+            }
+        };
+
+        // Cargar logros desde localStorage
+        function cargarLogros() {
+            const logrosGuardados = localStorage.getItem('logrosEstudiante');
+            if (logrosGuardados) {
+                const logrosParseados = JSON.parse(logrosGuardados);
+                for (const key in logrosParseados) {
+                    if (logrosData[key]) {
+                        logrosData[key].desbloqueado = logrosParseados[key];
+                    }
+                }
+            }
+            actualizarListaLogros();
+            verificarLogroMultitarea();
+        }
+
+        // Mostrar logros en el modal
+        function actualizarListaLogros() {
+            const lista = document.getElementById('listaLogros');
+            lista.innerHTML = '';
+            
+            for (const [key, logro] of Object.entries(logrosData)) {
+                const logroElement = document.createElement('div');
+                logroElement.className = `logro-item ${logro.desbloqueado ? '' : 'logro-bloqueado'}`;
+                logroElement.innerHTML = `
+                    <div class="logro-icon">${logro.icono}</div>
+                    <div>
+                        <h3>${logro.titulo}</h3>
+                        <p>${logro.descripcion}</p>
+                        ${logro.desbloqueado ? 
+                            '<small class="badge" style="background: var(--success-color); color: white;">Desbloqueado</small>' : 
+                            '<small class="badge">No desbloqueado</small>'}
+                    </div>
+                `;
+                lista.appendChild(logroElement);
+            }
+        }
+
+        // Desbloquear logro
+        function desbloquearLogro(logroKey) {
+            if (logrosData[logroKey] && !logrosData[logroKey].desbloqueado) {
+                logrosData[logroKey].desbloqueado = true;
+                localStorage.setItem('logrosEstudiante', JSON.stringify(
+                    Object.fromEntries(
+                        Object.entries(logrosData).map(([key, val]) => [key, val.desbloqueado])
+                )));
+                
+                // Mostrar notificación
+                document.getElementById('logroDesbloqueadoTitulo').textContent = logrosData[logroKey].titulo;
+                const notificacion = document.getElementById('notificacionLogro');
+                notificacion.style.display = 'block';
+                
+                setTimeout(() => {
+                    notificacion.style.display = 'none';
+                }, 3000);
+                
+                actualizarListaLogros();
+                verificarLogroMultitarea();
+                return true;
+            }
+            return false;
+        }
+
+        // Verificar logro "multitarea"
+        function verificarLogroMultitarea() {
+            const logrosDesbloqueados = Object.values(logrosData).filter(l => l.desbloqueado).length;
+            if (logrosDesbloqueados >= 3 && !logrosData.multitarea.desbloqueado) {
+                desbloquearLogro('multitarea');
+            }
+        }
+
+        // Control del modal
+        document.getElementById('verLogrosBtn').addEventListener('click', () => {
+            document.getElementById('logrosContainer').style.display = 'flex';
+        });
+
+        function cerrarLogros() {
+            document.getElementById('logrosContainer').style.display = 'none';
+        }
+
+        // ===== CHATBOT ===== //
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const userMessageInput = document.getElementById('userMessage');
+        const sendMessageBtn = document.getElementById('sendMessage');
+        const studentNameChat = document.getElementById('studentNameChat');
+        
+        let contadorPreguntas = 0;
+        const preguntasParaLogro = 10;
+
+        // Mostrar nombre del estudiante
+        studentNameChat.textContent = sesion.usuario || 'Estudiante';
+        
+        // Base de conocimiento del chatbot
+        const chatbotCommands = {
+            "hola": {
+                keywords: ["hola", "holi", "buenos días", "buenas tardes", "buenas noches"],
+                response: "¡Hola de nuevo! ¿En qué puedo ayudarte hoy?"
+            },
+            "notas": {
+                keywords: ["nota", "notas", "calificacion", "calificaciones", "puntaje"],
+                response: "📊 Tus notas se actualizan automáticamente. Si no ves cambios:<br>- Recarga la página<br>- Consulta con tu profesor"
+            },
+            "matematicas": {
+                keywords: ["matemática", "matemáticas", "mate", "math", "álgebra", "geometría"],
+                response: "📌 Puedo ayudarte con:<br>- Álgebra (ecuaciones, polinomios)<br>- Geometría (áreas, volúmenes)<br>- Cálculo (derivadas, integrales)<br><br>¿Qué tema necesitas?"
+            },
+            "archivo": {
+                keywords: ["archivo", "subir", "entregar", "trabajo", "documento"],
+                response: "📤 Para enviar archivos:<br>1) Ve a 'Entregar trabajo'<br>2) Selecciona el área<br>3) Sube tu archivo<br>4) Haz clic en 'Enviar archivo'"
+            },
+            "horario": {
+                keywords: ["horario", "horarios", "clases", "tutoría", "tutorias"],
+                response: "⏰ Horarios de tutorías:<br>- Lunes a Viernes: 3pm a 7pm<br>- Sábados: 9am a 1pm"
+            },
+            "profesor": {
+                keywords: ["profesor", "profesora", "maestro", "teacher", "consultar"],
+                response: "👨‍🏫 Para contactar a tu profesor:<br>1) Ve a la sección 'Contactar'<br>2) Selecciona el área<br>3) Envía tu consulta"
+            },
+            "logros": {
+                keywords: ["logro", "logros", "insignias", "trofeos"],
+                response: "🏆 <b>Tus logros:</b><br>Haz clic en el botón de trofeo abajo a la derecha para ver tu progreso y logros desbloqueados."
+            },
+            "default": {
+                response: "❓ No entendí. Prueba con:<br>- 'matemáticas'<br>- 'notas'<br>- 'archivo'<br>- 'horario'<br>- 'logros'"
+            }
+        };
+        
+        // Toggle del chatbot
+        chatbotToggle.addEventListener('click', () => {
+            chatbotWindow.classList.toggle('active');
+        });
+        
+        // Enviar mensaje
+        function sendMessage() {
+            const message = userMessageInput.value.trim();
+            if (!message) return;
+            
+            // Mostrar mensaje del usuario
+            displayMessage(message, 'user');
+            userMessageInput.value = '';
+            
+            // Contar preguntas para el logro
+            contadorPreguntas++;
+            if (contadorPreguntas >= preguntasParaLogro) {
+                desbloquearLogro('chatbot_experto');
+            }
+            
+            // Mostrar indicador de que el bot está escribiendo
+            showTypingIndicator();
+            
+            // Simular tiempo de respuesta del bot
+            setTimeout(() => {
+                removeTypingIndicator();
+                const botResponse = getBotResponse(message);
+                displayMessage(botResponse, 'bot');
+            }, 1000 + Math.random() * 2000);
+        }
+        
+        // Mostrar mensaje en el chat
+        function displayMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            messageDiv.innerHTML = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        // Mostrar que el bot está escribiendo
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatbotMessages.appendChild(typingDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+        
+        // Ocultar indicador de escritura
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        // Generar respuesta del bot
+        function getBotResponse(message) {
+            const lowerMessage = message.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            
+            for (const [command, data] of Object.entries(chatbotCommands)) {
+                if (command === "default") continue;
+                
+                if (data.keywords.some(keyword => 
+                    lowerMessage.includes(keyword.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+                )) {
+                    return data.response;
+                }
+            }
+            
+            return chatbotCommands.default.response;
+        }
+        
+        // Event listeners
+        sendMessageBtn.addEventListener('click', sendMessage);
+        userMessageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+        
+        // ===== FUNCIONES PRINCIPALES ===== //
+        // Mostrar datos del estudiante
+        document.getElementById('nombreEstudiante').textContent = sesion.usuario || 'Estudiante';
+        document.getElementById('dniEstudiante').textContent = sesion.dni || 'No registrado';
+        document.getElementById('areaEstudianteBadge').textContent = sesion.area || 'Área no asignada';
+
+        // Iconos para cada área
+        const areaIcons = {
+            "Ciencia y tecnología": "🔬",
+            "Matemática": "🧮",
+            "Comunicación": "📝",
+            "DPCC": "🏛️",
+            "Inglés": "🌎",
+            "Ciencias sociales": "🏙️",
+            "Arte": "🎨",
+            "Religión": "🙏",
+            "EPT": "🛠️",
+            "Educación física": "⚽"
+        };
+
+        // Mostrar calificaciones por área
+        function cargarAreasConNotas() {
+            const container = document.getElementById('areasContainer');
+            container.innerHTML = '';
+            
+            const areas = Object.keys(areaIcons);
+            
+            areas.forEach(area => {
+                const nota = sesion.notas && sesion.notas[area] ? Math.round(parseFloat(sesion.notas[area])) : null;
+                const icon = areaIcons[area] || "📚";
+                
+                const areaCard = document.createElement('div');
+                areaCard.className = 'area-card';
+                areaCard.style.animationDelay = `${areas.indexOf(area) * 0.1}s`;
+                
+                let estado = '';
+                let claseEstado = '';
+                let notaColor = '';
+                
+                if (nota !== null) {
+                    if (nota < 11) {
+                        estado = 'No aprobado';
+                        claseEstado = 'desaprobado';
+                        notaColor = 'color: var(--danger-color);';
+                    } else {
+                        estado = 'Aprobado';
+                        claseEstado = 'aprobado';
+                        notaColor = 'color: var(--success-color);';
+                    }
+                    
+                    // Verificar logro de nota perfecta
+                    if (nota === 20) {
+                        desbloquearLogro('nota_perfecta');
+                    }
+                }
+                
+                areaCard.innerHTML = `
+                    <div class="area-title">
+                        <span>${icon} ${area}</span>
+                    </div>
+                    <div class="nota-display" style="${notaColor}">
+                        ${nota !== null ? nota : '--'}
+                    </div>
+                    <div class="nota-mensaje ${claseEstado}">
+                        ${nota !== null ? estado : 'Sin calificación'}
+                        ${area === sesion.area ? ' (Área principal)' : ''}
+                    </div>
+                `;
+                
+                container.appendChild(areaCard);
+            });
+        }
+
+        // Mostrar último archivo enviado si existe
+        function cargarUltimoArchivo() {
+            const archivos = JSON.parse(localStorage.getItem('archivosEstudiante') || []);
+            const misArchivos = archivos.filter(a => a.dni === sesion.dni);
+            
+            if (misArchivos.length > 0) {
+                const ultimoArchivo = misArchivos[misArchivos.length - 1];
+                document.getElementById('ultimoArchivoInfo').style.display = 'block';
+                document.getElementById('nombreArchivo').textContent = `📄 ${ultimoArchivo.nombre || 'Sin nombre'}`;
+                document.getElementById('fechaArchivo').textContent = `📅 ${ultimoArchivo.fecha || 'Sin fecha'}`;
+                document.getElementById('areaArchivo').textContent = `📚 ${ultimoArchivo.area || 'Sin área especificada'}`;
+            } else {
+                document.getElementById('ultimoArchivoInfo').style.display = 'block';
+            }
+        }
+
+        // Enviar archivo para un área específica
+        function enviarArchivo() {
+            const area = document.getElementById('areaTrabajo').value;
+            const archivoInput = document.getElementById('archivoTrabajo');
+            const archivo = archivoInput.files[0];
+            const btnText = document.getElementById('btnText');
+            const btnLoading = document.getElementById('btnLoading');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (!area) {
+                alert('Por favor selecciona un área');
+                return;
+            }
+            
+            if (!archivo) {
+                alert('Por favor selecciona un archivo');
+                return;
+            }
+
+            // Mostrar estado de carga
+            btnText.textContent = 'Enviando...';
+            btnLoading.style.display = 'inline-block';
+            submitBtn.disabled = true;
+
+            // Simular carga (en un caso real sería una petición AJAX)
+            setTimeout(() => {
+                const lector = new FileReader();
+                lector.onload = function(e) {
+                    const archivos = JSON.parse(localStorage.getItem('archivosEstudiante') || '[]');
+                    
+                    // Eliminar archivos previos del mismo estudiante en la misma área
+                    const nuevosArchivos = archivos.filter(a => !(a.dni === sesion.dni && a.area === area));
+                    
+                    nuevosArchivos.push({
+                        usuario: sesion.usuario,
+                        dni: sesion.dni,
+                        area: area,
+                        nombre: archivo.name,
+                        contenido: e.target.result,
+                        fecha: new Date().toISOString()
+                    });
+                    
+                    localStorage.setItem('archivosEstudiante', JSON.stringify(nuevosArchivos));
+                    
+                    // Restaurar botón
+                    btnText.textContent = 'Enviar archivo';
+                    btnLoading.style.display = 'none';
+                    submitBtn.disabled = false;
+                    
+                    // Mostrar notificación
+                    const notificacion = document.createElement('div');
+                    notificacion.textContent = `✅ Archivo enviado correctamente para ${area}`;
+                    notificacion.style.cssText = `
+                        position: fixed;
+                        bottom: 20px;
+                        right: 20px;
+                        background: #4CAF50;
+                        color: white;
+                        padding: 15px;
+                        border-radius: 5px;
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                        z-index: 1000;
+                        animation: fadeIn 0.3s;
+                    `;
+                    document.body.appendChild(notificacion);
+                    
+                    // Actualizar la visualización del último archivo
+                    cargarUltimoArchivo();
+                    
+                    // Desbloquear logro de archivo subido
+                    desbloquearLogro('archivo_subido');
+                    
+                    // Limpiar inputs
+                    archivoInput.value = '';
+                    
+                    setTimeout(() => {
+                        notificacion.style.animation = 'fadeOut 0.3s';
+                        setTimeout(() => document.body.removeChild(notificacion), 300);
+                    }, 3000);
+                };
+                lector.readAsDataURL(archivo);
+            }, 1000);
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('sesionActiva');
+            window.location.href = 'login.html';
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarAreasConNotas();
+            cargarUltimoArchivo();
+            cargarLogros();
+            
+            setTimeout(() => {
+                desbloquearLogro('primer_login');
+            }, 1500);
+            
+            setTimeout(() => {
+                displayMessage("Puedes preguntarme sobre:<br>- Materias específicas<br>- Cómo enviar archivos<br>- Tus notas<br>- Horarios de tutoría<br>- Tus logros", 'bot');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

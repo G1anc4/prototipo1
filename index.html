@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poliweb - Plataforma Educativa</title>
+    <meta name="description" content="Plataforma educativa que ayuda a estudiantes a mejorar su rendimiento académico">
+    <meta name="theme-color" content="#6f0000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="index/css/estilos.css">
+</head>
+<body>
+    <canvas id="burbujas"></canvas>
+    
+    <header>
+        <nav class="nav-container">
+            <a href="#" class="logo">
+                <img src="imagenes/logo2.png" alt="Logo de Poliweb" loading="lazy" width="40" height="40">
+                Poliweb
+            </a>
+            <button class="menu-btn" id="menuBtn" aria-label="Menú">
+                ☰
+            </button>
+            <ul class="nav-links">
+                <li><a href="politica/politica.html">Política</a></li>
+                <li><a href="redes/redes.html">Redes Sociales</a></li>
+                <li><a href="ranking/ranking.html">Ranking</a></li>
+            </ul>
+        </nav>
+        <ul class="mobile-menu" id="mobileMenu">
+            <li><a href="politica.html">Política</a></li>
+            <li><a href="redes.html">Redes Sociales</a></li>
+            <li><a href="ranking.html">Ranking</a></li>
+        </ul>
+    </header>
+
+    <main class="container">
+        <h1>MEJORES RESULTADOS</h1>
+        <p class="hero">AYUDAMOS A LOS ALUMNOS CON SUS ESTUDIOS</p>
+        <p class="hero">Nosotros ayudamos a los alumnos a entender los contenidos escolares para que ellos aprendan y así logren mejorar su rendimiento.</p>
+        
+        <div style="text-align: center;">
+            <a href="login/login.html" class="cta-button">
+                <span>Iniciar Sesión</span>
+            </a>
+        </div>
+
+        <div class="stats">
+            <h2>Una herramienta confiable para organizar tus clases, tareas y notas</h2>
+        </div>
+
+        <section class="features">
+            <article class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Revisa tus clases</h3>
+                <p>Accede al material de tus cursos, tareas y recursos asignados por tus profesores</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>Consulta tus notas</h3>
+                <p>Revisa tus calificaciones de forma clara, ordenada y segura</p>
+            </article>
+
+            <article class="feature-card">
+                <div class="feature-icon">📢</div>
+                <h3>Recibe comunicados</h3>
+                <p>Infórmate sobre anuncios importantes de la institución al instante</p>
+            </article>
+        </section>
+    </main>
+
+    <script src="index/js/script.js"></script>
+</body>
+</html>

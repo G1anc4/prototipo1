@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Profesor - ACODE</title>
+    <style>
+        :root {
+            --primary-color: #6f0000;
+            --secondary-color: #990000;
+            --light-color: #f5f5f5;
+            --dark-color: #333;
+            --success-color: #2e7d32;
+            --danger-color: #c62828;
+            --warning-color: #f9a825;
+            --info-color: #1565c0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            background-image: linear-gradient(to bottom, #f5f5f5, #e9e9e9);
+            color: var(--dark-color);
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo::before {
+            content: "👨‍🏫";
+            font-size: 1.8rem;
+        }
+        
+        .logout-btn {
+            background: white;
+            color: var(--secondary-color);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .logout-btn:hover {
+            background: #ffe5e5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .logout-btn::after {
+            content: "→";
+            font-weight: bold;
+        }
+        
+        .main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+            font-size: 1.8rem;
+        }
+        
+        h2::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+        
+        .card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid var(--secondary-color);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+        
+        .profile-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        
+        .profile-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .profile-info p {
+            margin: 0.3rem 0 0;
+            color: #666;
+        }
+        
+        .area-badge {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            background: var(--secondary-color);
+            color: white;
+            margin-top: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+            position: sticky;
+            top: 0;
+            font-weight: 600;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .nota-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        input[type="number"] {
+            width: 70px;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            transition: border 0.3s;
+        }
+        
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(153, 0, 0, 0.1);
+        }
+        
+        .save-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .save-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .save-btn::before {
+            content: "💾";
+        }
+        
+        .no-students {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-style: italic;
+        }
+        
+        /* Estilos para el calendario */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .week-navigation {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .week-navigation button {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .week-navigation button:hover {
+            background: var(--primary-color);
+        }
+        
+        .current-week {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .week-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .day-header {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.8rem;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        
+        .day-container {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 0.5rem;
+            min-height: 100px;
+            position: relative;
+        }
+        
+        .day-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .day-date {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        
+        .day-count {
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+        
+        .toggle-day-btn {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .toggle-day-btn:hover {
+            background: rgba(153, 0, 0, 0.1);
+        }
+        
+        .day-files {
+            display: none;
+            margin-top: 0.5rem;
+        }
+        
+        .day-files.expanded {
+            display: block;
+        }
+        
+        .file-card {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 3px solid var(--secondary-color);
+            transition: all 0.2s;
+        }
+        
+        .file-card:hover {
+            transform: translateX(3px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        
+        .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.3rem;
+        }
+        
+        .file-user {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        
+        .file-time {
+            font-size: 0.8rem;
+            color: #777;
+        }
+        
+        .file-name {
+            font-size: 0.9rem;
+            margin: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .file-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.5rem;
+        }
+        
+        .download-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+        
+        .download-btn:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .no-files {
+            text-align: center;
+            color: #999;
+            font-size: 0.9rem;
+            padding: 0.5rem;
+            font-style: italic;
+        }
+        
+        .today {
+            background: rgba(153, 0, 0, 0.1);
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .view-all-btn {
+            display: block;
+            background: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .view-all-btn:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        
+        /* Estilos para la vista detallada */
+        #detail-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        
+        .detail-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-to-calendar {
+            background: white;
+            color: var(--secondary-color);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .detail-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .search-container {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .search-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .detail-files-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        tr, .file-card {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .nota-input-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            
+            .week-days {
+                grid-template-columns: 1fr;
+            }
+            
+            .day-container {
+                min-height: auto;
+            }
+            
+            .detail-files-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Verificar sesión
+        const sesion = JSON.parse(localStorage.getItem('sesionActiva'));
+        if (!sesion || sesion.rol !== 'profesor') {
+            window.location.href = '../login/login.html';
+        }
+    </script>
+
+    <header>
+        <div class="logo">Poliweb - Panel del Profesor</div>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    </header>
+
+    <main class="main">
+        <div class="card">
+            <div class="profile-section">
+                <div class="profile-icon">
+                    👨‍🏫
+                </div>
+                <div class="profile-info">
+                    <h3 id="nombreProfesor"></h3>
+                    <p>DNI: <span id="dniProfesor"></span></p>
+                    <span class="area-badge" id="areaProfesorBadge"></span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bandeja de archivos de estudiantes - Calendario -->
+        <div class="card">
+            <div class="calendar-header">
+                <h3>📅 Calendario de Tareas Recibidas</h3>
+                <div class="week-navigation">
+                    <button id="prev-week">← Semana anterior</button>
+                    <span class="current-week" id="current-week"></span>
+                    <button id="next-week">Semana siguiente →</button>
+                </div>
+            </div>
+            <p>Documentos enviados por estudiantes para el área de <strong id="areaProfesorTexto"></strong></p>
+            
+            <div class="week-days" id="week-days">
+                <!-- Los días de la semana se generarán aquí -->
+            </div>
+        </div>
+        
+        <!-- Tabla de estudiantes para calificación -->
+        <div class="card">
+            <h3>📝 Gestión de Calificaciones</h3>
+            <p>Asignar notas para el área de <strong id="areaProfesorTexto2"></strong></p>
+            
+            <table>
+    <thead>
+        <tr>
+            <th>Estudiante</th>
+            <th>DNI</th>
+            <!-- Columnas dinámicas para competencias -->
+            <th id="competencias-header" colspan="3">Competencias</th>
+            <th>Acciones</th>
+        </tr>
+        <tr>
+            <th colspan="2"></th>
+            <!-- Nombres de competencias (se llenan con JS) -->
+            <th id="competencias-nombres"></th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
+    <tbody id="tablaEstudiantes"></tbody>
+</table>
+
+<script>
+    // Función para cargar estudiantes con competencias
+    function cargarEstudiantes() {
+        const estudiantes = JSON.parse(localStorage.getItem('usuariosRegistrados') || []
+            .filter(u => u.rol === 'estudiante'));
+        
+        const tabla = document.getElementById('tablaEstudiantes');
+        const competenciasHeader = document.getElementById('competencias-header');
+        const competenciasNombres = document.getElementById('competencias-nombres');
+        
+        // Obtener competencias del área del profesor
+        const competencias = configuracionAreas.competencias[sesion.area] || [];
+        
+        // Actualizar encabezados de la tabla
+        competenciasHeader.colSpan = competencias.length;
+        competenciasNombres.innerHTML = competencias.map(c => `<th>${c}</th>`).join('');
+        
+        if (estudiantes.length === 0) {
+            tabla.innerHTML = `<tr><td colspan="${4 + competencias.length}" class="no-students">No hay estudiantes</td></tr>`;
+            return;
+        }
+        
+        // Llenar tabla
+        tabla.innerHTML = estudiantes.map(est => {
+            const notasArea = est.notas && est.notas[sesion.area] ? est.notas[sesion.area] : {};
+            
+            return `
+                <tr>
+                    <td>${est.usuario || 'Sin nombre'}</td>
+                    <td>${est.dni || 'Sin DNI'}</td>
+                    ${competencias.map(comp => `
+                        <td>
+                            <input type="number" min="1" max="20" 
+                                   value="${notasArea[comp] || ''}"
+                                   placeholder="1-20"
+                                   data-competencia="${comp}"
+                                   oninput="validarNotaEntera(this)">
+                        </td>
+                    `).join('')}
+                    <td>
+                        <button class="save-btn" onclick="guardarCompetencias('${est.dni}')">
+                            💾 Guardar
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // Función para guardar competencias
+    function guardarCompetencias(dni) {
+        const fila = document.querySelector(`tr:has(button[onclick="guardarCompetencias('${dni}')"])`);
+        const inputs = fila.querySelectorAll('input[type="number"]');
+        
+        let competenciasCalificadas = {};
+        inputs.forEach(input => {
+            const competencia = input.getAttribute('data-competencia');
+            const nota = parseInt(input.value);
+            if (!isNaN(nota) && nota >= 1 && nota <= 20) {
+                competenciasCalificadas[competencia] = nota;
+            }
+        });
+
+        // Actualizar en localStorage
+        let usuarios = JSON.parse(localStorage.getItem('usuariosRegistrados')) || [];
+        usuarios = usuarios.map(u => {
+            if (u.dni === dni) {
+                const notas = u.notas || {};
+                notas[sesion.area] = competenciasCalificadas;
+                return { ...u, notas };
+            }
+            return u;
+        });
+        
+        localStorage.setItem('usuariosRegistrados', JSON.stringify(usuarios));
+        
+        // Mostrar notificación
+        const notificacion = document.createElement('div');
+        notificacion.innerHTML = `✅ Competencias actualizadas para DNI: ${dni}`;
+        notificacion.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            animation: fadeIn 0.3s;
+        `;
+        document.body.appendChild(notificacion);
+        
+        setTimeout(() => {
+            notificacion.remove();
+        }, 3000);
+    }
+
+        // Mostrar datos del profesor
+        document.getElementById('nombreProfesor').textContent = sesion.usuario || 'Profesor';
+        document.getElementById('dniProfesor').textContent = sesion.dni || 'No registrado';
+        document.getElementById('areaProfesorBadge').textContent = sesion.area || 'Sin área asignada';
+        document.getElementById('areaProfesorTexto').textContent = sesion.area || 'Sin área asignada';
+        document.getElementById('areaProfesorTexto2').textContent = sesion.area || 'Sin área asignada';
+
+        // Variables para el calendario
+        let currentWeekStart = new Date();
+        currentWeekStart.setHours(0, 0, 0, 0);
+        // Ajustar al lunes de la semana actual
+        currentWeekStart.setDate(currentWeekStart.getDate() - (currentWeekStart.getDay() || 7) + 1);
+
+        // Variables para la vista detallada
+        let currentDetailDate = null;
+        let currentDetailArea = null;
+        let allTasksForDate = [];
+
+        // Función para formatear fecha
+        function formatDate(date) {
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            return date.toLocaleDateString('es-ES', options);
+        }
+
+        // Función para formatear fecha corta (para comparaciones)
+        function formatShortDate(date) {
+            return date.toISOString().split('T')[0];
+        }
+
+        // Función para formatear hora
+        function formatTime(dateStr) {
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            } catch (e) {
+                return 'Hora desconocida';
+            }
+        }
+
+        // Función para obtener el nombre del día
+        function getDayName(date) {
+            const options = { weekday: 'long' };
+            return date.toLocaleDateString('es-ES', options);
+        }
+
+        // Función para actualizar el calendario
+        function updateCalendar() {
+            const weekDaysContainer = document.getElementById('week-days');
+            weekDaysContainer.innerHTML = '';
+            
+            // Actualizar el título de la semana
+            const weekEnd = new Date(currentWeekStart);
+            weekEnd.setDate(weekEnd.getDate() + 6);
+            document.getElementById('current-week').textContent = 
+                `Semana del ${currentWeekStart.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })} al ${weekEnd.toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })}`;
+            
+            // Obtener archivos de la semana actual
+            const archivos = JSON.parse(localStorage.getItem('archivosEstudiante') || '[]')
+                .filter(archivo => archivo.area === sesion.area);
+            
+            // Agrupar archivos por día
+            const archivosPorDia = {};
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            // Crear 7 días (de lunes a domingo)
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(currentWeekStart);
+                currentDate.setDate(currentDate.getDate() + i);
+                const dateStr = formatShortDate(currentDate);
+                
+                // Filtrar archivos para este día
+                archivosPorDia[dateStr] = archivos.filter(archivo => {
+                    try {
+                        const archivoDate = new Date(archivo.fecha);
+                        archivoDate.setHours(0, 0, 0, 0);
+                        return formatShortDate(archivoDate) === dateStr;
+                    } catch (e) {
+                        return false;
+                    }
+                });
+            }
+            
+            // Generar HTML para cada día
+            for (let i = 0; i < 7; i++) {
+                const currentDate = new Date(currentWeekStart);
+                currentDate.setDate(currentDate.getDate() + i);
+                const dateStr = formatShortDate(currentDate);
+                const dayName = getDayName(currentDate);
+                const isToday = formatShortDate(currentDate) === formatShortDate(today);
+                
+                const dayContainer = document.createElement('div');
+                dayContainer.className = `day-container ${isToday ? 'today' : ''}`;
+                
+                const archivosDia = archivosPorDia[dateStr] || [];
+                
+                dayContainer.innerHTML = `
+                    <div class="day-title">
+                        <span class="day-date">${dayName.charAt(0).toUpperCase() + dayName.slice(1)}, ${currentDate.getDate()} ${currentDate.toLocaleDateString('es-ES', { month: 'long' })}</span>
+                        ${archivosDia.length > 0 ? `<span class="day-count">${archivosDia.length}</span>` : ''}
+                    </div>
+                    ${archivosDia.length > 0 ? 
+                        `<button class="toggle-day-btn" data-date="${dateStr}">▼ Mostrar tareas (${archivosDia.length})</button>
+                         <button class="view-all-btn" onclick="showDetailView('${dateStr}')">Ver todas las tareas de este día</button>
+                         <div class="day-files" id="files-${dateStr}"></div>` : 
+                        `<div class="no-files">No hay tareas este día</div>`}
+                `;
+                
+                weekDaysContainer.appendChild(dayContainer);
+                
+                // Si hay archivos, generarlos (aunque estarán ocultos inicialmente)
+                if (archivosDia.length > 0) {
+                    const filesContainer = document.getElementById(`files-${dateStr}`);
+                    
+                    archivosDia.forEach(archivo => {
+                        // Extraer la extensión del archivo
+                        const extension = archivo.nombre.split('.').pop().toLowerCase();
+                        let icono = '📄';
+                        
+                        // Asignar iconos según tipo de archivo
+                        if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) {
+                            icono = '🖼️';
+                        } else if (['pdf'].includes(extension)) {
+                            icono = '📕';
+                        } else if (['doc', 'docx'].includes(extension)) {
+                            icono = '📝';
+                        } else if (['xls', 'xlsx'].includes(extension)) {
+                            icono = '📊';
+                        }
+                        
+                        const fileCard = document.createElement('div');
+                        fileCard.className = 'file-card';
+                        fileCard.innerHTML = `
+                            <div class="file-header">
+                                <span class="file-user">${archivo.usuario || 'Sin nombre'} (${archivo.dni || 'Sin DNI'})</span>
+                                <span class="file-time">${formatTime(archivo.fecha)}</span>
+                            </div>
+                            <div class="file-name">
+                                ${icono} ${archivo.nombre || 'Sin nombre de archivo'}
+                            </div>
+                            <div class="file-actions">
+                                <button class="download-btn" onclick="descargarArchivo('${archivo.contenido}', '${archivo.nombre}')">
+                                    Descargar
+                                </button>
+                            </div>
+                        `;
+                        filesContainer.appendChild(fileCard);
+                    });
+                }
+            }
+            
+            // Agregar event listeners a los botones de mostrar/ocultar
+            document.querySelectorAll('.toggle-day-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const date = this.getAttribute('data-date');
+                    const filesContainer = document.getElementById(`files-${date}`);
+                    
+                    if (filesContainer.classList.contains('expanded')) {
+                        filesContainer.classList.remove('expanded');
+                        this.textContent = `▼ Mostrar tareas (${filesContainer.children.length})`;
+                    } else {
+                        filesContainer.classList.add('expanded');
+                        this.textContent = `▲ Ocultar tareas (${filesContainer.children.length})`;
+                    }
+                });
+            });
+        }
+
+        // Mostrar vista detallada para un día específico
+        function showDetailView(dateStr) {
+            currentDetailDate = dateStr;
+            currentDetailArea = sesion.area;
+            
+            // Obtener todas las tareas para este día y área
+            const archivos = JSON.parse(localStorage.getItem('archivosEstudiante') || '[]');
+            allTasksForDate = archivos.filter(archivo => {
+                try {
+                    const archivoDate = new Date(archivo.fecha).toISOString().split('T')[0];
+                    return archivoDate === dateStr && archivo.area === sesion.area;
+                } catch (e) {
+                    return false;
+                }
+            });
+            
+            // Actualizar la vista detallada
+            updateDetailView();
+            
+            // Mostrar la vista detallada
+            document.getElementById('detail-view').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Configurar el título
+            const fecha = new Date(dateStr);
+            document.getElementById('detail-date-title').textContent = formatDate(fecha);
+        }
+
+        // Ocultar vista detallada
+        function hideDetailView() {
+            document.getElementById('detail-view').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Actualizar la vista detallada con las tareas
+        function updateDetailView(filterTerm = '') {
+            const container = document.getElementById('detail-files-container');
+            container.innerHTML = '';
+            
+            let tareasFiltradas = allTasksForDate;
+            
+            // Aplicar filtro si existe
+            if (filterTerm) {
+                const term = filterTerm.toLowerCase();
+                tareasFiltradas = allTasksForDate.filter(archivo => {
+                    return (archivo.usuario && archivo.usuario.toLowerCase().includes(term)) ||
+                           (archivo.dni && archivo.dni.toLowerCase().includes(term)) ||
+                           (archivo.nombre && archivo.nombre.toLowerCase().includes(term));
+                });
+            }
+            
+            // Actualizar contador
+            document.getElementById('detail-total-tasks').textContent = 
+                `${tareasFiltradas.length} tarea${tareasFiltradas.length !== 1 ? 's' : ''} encontrada${tareasFiltradas.length !== 1 ? 's' : ''}`;
+            
+            if (tareasFiltradas.length === 0) {
+                container.innerHTML = '<div class="no-files">No se encontraron tareas</div>';
+                return;
+            }
+            
+            // Mostrar las tareas
+            tareasFiltradas.forEach(archivo => {
+                const extension = archivo.nombre.split('.').pop().toLowerCase();
+                let icono = '📄';
+                
+                if (['jpg', 'jpeg', 'png', 'gif'].includes(extension)) icono = '🖼️';
+                else if (['pdf'].includes(extension)) icono = '📕';
+                else if (['doc', 'docx'].includes(extension)) icono = '📝';
+                else if (['xls', 'xlsx'].includes(extension)) icono = '📊';
+                
+                const fileCard = document.createElement('div');
+                fileCard.className = 'file-card';
+                fileCard.innerHTML = `
+                    <div class="file-header">
+                        <span class="file-user">${archivo.usuario || 'Sin nombre'} (${archivo.dni || 'Sin DNI'})</span>
+                        <span class="file-time">${formatTime(archivo.fecha)}</span>
+                    </div>
+                    <div class="file-name">
+                        ${icono} ${archivo.nombre || 'Sin nombre de archivo'}
+                    </div>
+                    <div class="file-actions">
+                        <button class="download-btn" onclick="descargarArchivo('${archivo.contenido}', '${archivo.nombre}')">
+                            Descargar archivo
+                        </button>
+                    </div>
+                `;
+                container.appendChild(fileCard);
+            });
+        }
+
+        // Navegación entre semanas
+        document.getElementById('prev-week').addEventListener('click', function() {
+            currentWeekStart.setDate(currentWeekStart.getDate() - 7);
+            updateCalendar();
+        });
+        
+        document.getElementById('next-week').addEventListener('click', function() {
+            currentWeekStart.setDate(currentWeekStart.getDate() + 7);
+            updateCalendar();
+        });
+
+        // Descargar archivo
+        function descargarArchivo(contenido, nombre) {
+            const link = document.createElement('a');
+            link.href = contenido;
+            link.download = nombre || 'archivo';
+            link.click();
+            
+            // Notificación
+            const notificacion = document.createElement('div');
+            notificacion.textContent = `⬇️ Descargando archivo: ${nombre}`;
+            notificacion.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--secondary-color);
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: fadeIn 0.3s;
+            `;
+            document.body.appendChild(notificacion);
+            
+            setTimeout(() => {
+                notificacion.style.animation = 'fadeOut 0.3s';
+                setTimeout(() => document.body.removeChild(notificacion), 300);
+            }, 3000);
+        }
+
+        // Cargar todos los estudiantes
+        function cargarEstudiantes() {
+            const estudiantes = JSON.parse(localStorage.getItem('usuariosRegistrados') || '[]')
+                .filter(u => u.rol === 'estudiante');
+            
+            const tabla = document.getElementById('tablaEstudiantes');
+            tabla.innerHTML = '';
+            
+            if (estudiantes.length === 0) {
+                tabla.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="no-students">
+                            No hay estudiantes registrados
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            estudiantes.forEach((est, index) => {
+                const tr = document.createElement('tr');
+                tr.style.animationDelay = `${index * 0.05}s`;
+                
+                // Obtener nota específica para el área del profesor
+                const notaActual = est.notas && est.notas[sesion.area] ? Math.round(parseFloat(est.notas[sesion.area])) : null;
+                
+                tr.innerHTML = `
+                    <td>${est.usuario || 'Sin nombre'}</td>
+                    <td>${est.dni || 'Sin DNI'}</td>
+                    <td id="nota-actual-${est.dni}">${notaActual !== null ? notaActual : '-'}</td>
+                    <td>
+                        <div class="nota-input-container">
+                            <input type="number" min="1" max="20" 
+                                   id="input-${est.dni}" 
+                                   value="${notaActual || ''}"
+                                   oninput="validarNotaEntera(this)"
+                                   placeholder="1-20">
+                            <button class="save-btn" onclick="asignarNota('${est.dni}', '${est.usuario}')">Guardar</button>
+                        </div>
+                    </td>
+                `;
+                tabla.appendChild(tr);
+            });
+        }
+
+        // Validar que sea número entero entre 1 y 20
+        function validarNotaEntera(input) {
+            let valor = input.value;
+            
+            // Eliminar decimales si los hubiera
+            if (valor.includes('.')) {
+                valor = valor.split('.')[0];
+                input.value = valor;
+            }
+            
+            // Validar rango
+            if (valor !== '') {
+                const num = parseInt(valor);
+                if (num < 1) input.value = 1;
+                if (num > 20) input.value = 20;
+            }
+        }
+
+        // Asignar nota (para el área del profesor)
+        function asignarNota(dni, nombreEstudiante) {
+            const inputNota = document.getElementById(`input-${dni}`);
+            let nota = parseInt(inputNota.value);
+            
+            if (isNaN(nota)) {
+                alert('Ingrese una nota válida (número entero del 1 al 20)');
+                inputNota.focus();
+                return;
+            }
+            
+            if (nota < 1 || nota > 20) {
+                alert('La nota debe ser un número entero entre 1 y 20');
+                inputNota.focus();
+                return;
+            }
+            
+            nota = Math.round(nota);
+
+            let usuarios = JSON.parse(localStorage.getItem('usuariosRegistrados') || []);
+            let encontrado = false;
+            
+            usuarios = usuarios.map(u => {
+                if (u.dni === dni && u.rol === 'estudiante') {
+                    encontrado = true;
+                    // Creamos o actualizamos el objeto de notas por área
+                    const notas = u.notas || {};
+                    notas[sesion.area] = nota; // Guardamos la nota específica para esta área
+                    return { ...u, notas };
+                }
+                return u;
+            });
+
+            if (!encontrado) {
+                alert('No se encontró al estudiante');
+                return;
+            }
+
+            localStorage.setItem('usuariosRegistrados', JSON.stringify(usuarios));
+            document.getElementById(`nota-actual-${dni}`).textContent = nota;
+            
+            // Notificación
+            const notificacion = document.createElement('div');
+            notificacion.innerHTML = `✅ Nota <strong>${nota}</strong> asignada a <strong>${nombreEstudiante}</strong> en ${sesion.area}`;
+            notificacion.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: #4CAF50;
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: fadeIn 0.3s;
+                max-width: 400px;
+            `;
+            document.body.appendChild(notificacion);
+            
+            setTimeout(() => {
+                notificacion.style.animation = 'fadeOut 0.3s';
+                setTimeout(() => document.body.removeChild(notificacion), 300);
+            }, 3000);
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('sesionActiva');
+            window.location.href = '../login/login.html';
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarEstudiantes();
+            updateCalendar();
+            
+            // Configurar búsqueda en vista detallada
+            document.getElementById('search-btn').addEventListener('click', function() {
+                const searchTerm = document.getElementById('search-input').value;
+                updateDetailView(searchTerm);
+            });
+            
+            document.getElementById('search-input').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    updateDetailView(this.value);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Panel de Administrador</h1>
+        
+        <!-- Pestañas -->
+        <div class="tab-container">
+            <div class="tab active" onclick="openTab('registrar')">Registrar Usuario</div>
+            <div class="tab" onclick="openTab('usuarios')">Lista de Usuarios</div>
+            <div class="tab" onclick="openTab('ranking')">Ranking Estudiantes</div>
+            <div class="tab" onclick="openTab('editar')">Editar Notas</div>
+        </div>
+        
+        <!-- Contenido de las pestañas -->
+        <div id="registrar" class="tab-content active">
+            <h2>Registrar Nuevo Usuario</h2>
+            <div class="form-group">
+                <label for="nuevoDni">DNI:</label>
+                <input type="text" id="nuevoDni" placeholder="Ingrese DNI">
+            </div>
+            <div class="form-group">
+                <label for="nuevoUsuario">Usuario:</label>
+                <input type="text" id="nuevoUsuario" placeholder="Ingrese nombre de usuario">
+            </div>
+            <div class="form-group">
+                <label for="nuevoPassword">Contraseña:</label>
+                <input type="password" id="nuevoPassword" placeholder="Ingrese contraseña">
+            </div>
+            <div class="form-group">
+                <label for="tipoUsuario">Tipo de Usuario:</label>
+                <select id="tipoUsuario" onchange="mostrarSelectorArea()">
+                    <option value="estudiante">Estudiante</option>
+                    <option value="profesor">Profesor</option>
+                    <option value="admin">Administrador</option>
+                </select>
+            </div>
+            <div class="form-group" id="areaProfesorGroup" style="display: none;">
+                <label for="areaProfesor">Área:</label>
+                <select id="areaProfesor">
+                    <option value="Ciencia y tecnología">Ciencia y tecnología</option>
+                    <option value="Matemática">Matemática</option>
+                    <option value="Comunicación">Comunicación</option>
+                    <option value="DPCC">DPCC</option>
+                    <option value="Inglés">Inglés</option>
+                    <option value="Ciencias sociales">Ciencias sociales</option>
+                    <option value="Arte">Arte</option>
+                    <option value="Religión">Religión</option>
+                    <option value="EPT">EPT</option>
+                    <option value="Educación física">Educación física</option>
+                </select>
+            </div>
+            <button onclick="registrarUsuario()">Registrar Usuario</button>
+        </div>
+        
+        <div id="usuarios" class="tab-content">
+            <h2>Usuarios Registrados</h2>
+            <div class="list-container" id="listaUsuarios"></div>
+        </div>
+        
+        <div id="ranking" class="tab-content">
+            <h2>Ranking de Estudiantes</h2>
+            <div class="list-container" id="rankingList"></div>
+        </div>
+        
+        <div id="editar" class="tab-content">
+            <h2>Editar Notas de Estudiantes</h2>
+            <div class="form-group">
+                <label for="buscarEstudiante">Buscar Estudiante:</label>
+                <input type="text" id="buscarEstudiante" placeholder="Ingrese nombre o DNI">
+                <button onclick="buscarEstudiante()">Buscar</button>
+            </div>
+            <div id="resultadoBusqueda"></div>
+            <div id="formularioEdicion" style="display: none;">
+                <h3>Editar Notas</h3>
+                <div id="camposNotas"></div>
+                <button onclick="guardarNotas()">Guardar Cambios</button>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+            <button onclick="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </div>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>

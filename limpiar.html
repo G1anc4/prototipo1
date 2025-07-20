@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Control - Limpieza</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 2rem;
+      text-align: center;
+    }
+    button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      background-color: #990000;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #6f0000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Panel de Limpieza</h1>
+  <p>Este panel te permite eliminar toda la información guardada (usuarios, estudiantes, sesión, etc).</p>
+  <button onclick="borrarTodo()">🧹 Borrar todo el localStorage</button>
+
+  <script>
+    function borrarTodo() {
+      if (confirm('¿Estás seguro de que quieres eliminar todos los datos?')) {
+        localStorage.clear();
+        alert('Todos los datos han sido eliminados.');
+        location.reload();
+      }
+    }
+  </script>
+
+</body>
+</html>

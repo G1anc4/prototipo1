@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Estudiante - Poliweb</title>
+    <link rel="stylesheet" href="css/estudiante.css">
+</head>
+<body>
+    <header>
+        <div class="logo">Poliweb - Panel del Estudiante</div>
+        <button class="logout-btn" onclick="cerrarSesion()">Cerrar sesión</button>
+    </header>
+
+    <main class="main">
+        <div class="card">
+            <div class="profile-section">
+                <div class="profile-icon">
+                    👨‍🎓
+                </div>
+                <div class="profile-info">
+                    <h3 id="nombreEstudiante"></h3>
+                    <p>DNI: <span id="dniEstudiante"></span></p>
+                    <span class="badge main-area-badge" id="areaEstudianteBadge"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3>📊 Mis calificaciones por área</h3>
+            <div class="areas-container" id="areasContainer"></div>
+        </div>
+        
+        <div class="card">
+            <h3>📤 Entregar trabajo</h3>
+            <div class="file-section">
+                <select id="areaTrabajo" class="file-input">
+                    <option value="">-- Selecciona un área --</option>
+                    <option value="Ciencia y tecnología">🔬 Ciencia y tecnología</option>
+                    <option value="Matemática">🧮 Matemática</option>
+                    <option value="Comunicación">📝 Comunicación</option>
+                    <option value="DPCC">🏛️ DPCC</option>
+                    <option value="Inglés">🌎 Inglés</option>
+                    <option value="Ciencias sociales">🏙️ Ciencias sociales</option>
+                    <option value="Arte">🎨 Arte</option>
+                    <option value="Religión">🙏 Religión</option>
+                    <option value="EPT">🛠️ EPT</option>
+                    <option value="Educación física">⚽ Educación física</option>
+                </select>
+                
+                <label for="archivoTrabajo" style="display: block; margin: 1rem 0 0.5rem; font-weight: bold;">
+                    📎 Seleccionar archivo:
+                </label>
+                <input type="file" id="archivoTrabajo" accept="image/*,.pdf,.doc,.docx,.xls,.xlsx">
+                
+                <button class="submit-btn" onclick="enviarArchivo()" id="submitBtn">
+                    <span id="btnText">Enviar archivo</span>
+                    <span id="btnLoading" class="loading" style="display: none;"></span>
+                </button>
+                
+                <div class="file-info" id="ultimoArchivoInfo">
+                    <p class="last-file">Último archivo enviado:</p>
+                    <p id="nombreArchivo">📄 Sin archivos enviados</p>
+                    <p id="areaArchivo">📚 Ningún área seleccionada</p>
+                    <p id="fechaArchivo">📅 Sin fecha de envío</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- === BOTÓN Y MODAL DE LOGROS === -->
+    <button id="verLogrosBtn" title="Tus logros">🏆</button>
+    <div class="notificacion-logro" id="notificacionLogro">
+        <strong>¡Logro desbloqueado!</strong>
+        <div id="logroDesbloqueadoTitulo"></div>
+    </div>
+    <div class="logros-container" id="logrosContainer">
+        <div class="logros-content">
+            <h2>🏆 Tus Logros</h2>
+            <div id="listaLogros"></div>
+            <button onclick="cerrarLogros()" class="submit-btn">Cerrar</button>
+        </div>
+    </div>
+
+    <!-- === CHATBOT === -->
+    <div class="chatbot-container">
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-icon">🤖</div>
+                <h3>Bianca</h3>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot-message">
+                    ¡Hola <span id="studentNameChat"></span>! Soy tu asistente educativo. ¿En qué puedo ayudarte hoy?
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="userMessage" placeholder="Escribe tu pregunta..." autocomplete="off">
+                <button id="sendMessage">➤</button>
+            </div>
+        </div>
+        <div class="chatbot-toggle" id="chatbotToggle">
+            💬
+        </div>
+    </div>
+
+<button onclick="probarConexion()">Probar conexión a Neon</button>
+
+<script>
+  async function probarConexion() {
+    try {
+      const res = await fetch('/.netlify/functions/getPost?id=1');
+      const data = await res.json();
+      console.log('Respuesta desde Neon:', data);
+      alert(JSON.stringify(data, null, 2)); // Muestra los datos en alerta
+    } catch (error) {
+      alert('Error al conectar con la base de datos');
+      console.error(error);
+    }
+  }
+</script>
+
+
+
+   <script src="js/chatbotDB.js"></script>
+   <script src="js/logros.js"></script>
+   <script src="js/estudiante.js"></script>
+</body>
+</html>
